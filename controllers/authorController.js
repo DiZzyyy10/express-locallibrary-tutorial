@@ -8,7 +8,7 @@ const asyncHandler = require("express-async-handler");
 exports.author_list = asyncHandler(async (req, res, next) => {
   const allAuthors = await Author.find().sort({ family_name: 1 }).exec();
   res.render("author_list", {
-    title: "Author List",
+    title: "著者一覧", // Translated
     author_list: allAuthors,
   });
 });
@@ -23,13 +23,13 @@ exports.author_detail = asyncHandler(async (req, res, next) => {
 
   if (author === null) {
     // No results.
-    const err = new Error("Author not found");
+    const err = new Error("著者が見つかりません"); // Translated
     err.status = 404;
     return next(err);
   }
 
   res.render("author_detail", {
-    title: "Author Detail",
+    title: "著者詳細", // Translated
     author: author,
     author_books: allBooksByAuthor,
   });
@@ -37,7 +37,7 @@ exports.author_detail = asyncHandler(async (req, res, next) => {
 
 // Display Author create form on GET.
 exports.author_create_get = (req, res, next) => {
-  res.render("author_form", { title: "Create Author" });
+  res.render("author_form", { title: "著者作成" }); // Translated
 };
 
 // Handle Author create on POST.
@@ -47,21 +47,21 @@ exports.author_create_post = [
     .trim()
     .isLength({ min: 1 })
     .escape()
-    .withMessage("First name must be specified.")
-    .isAlphanumeric()
-    .withMessage("First name has non-alphanumeric characters."),
+    .withMessage("名を入力してください。") // Translated
+    .isAlphanumeric() // Note: isAlphanumeric might be restrictive for some Japanese names if they include Kana/Kanji. Consider if this validation is appropriate.
+    .withMessage("名に英数字以外の文字が含まれています。"), // Translated
   body("family_name")
     .trim()
     .isLength({ min: 1 })
     .escape()
-    .withMessage("Family name must be specified.")
-    .isAlphanumeric()
-    .withMessage("Family name has non-alphanumeric characters."),
-  body("date_of_birth", "Invalid date of birth")
+    .withMessage("姓を入力してください。") // Translated
+    .isAlphanumeric() // Note: isAlphanumeric might be restrictive for some Japanese names.
+    .withMessage("姓に英数字以外の文字が含まれています。"), // Translated
+  body("date_of_birth", "生年月日が無効です") // Translated
     .optional({ values: "falsy" })
     .isISO8601()
     .toDate(),
-  body("date_of_death", "Invalid date of death")
+  body("date_of_death", "没年月日が無効です") // Translated
     .optional({ values: "falsy" })
     .isISO8601()
     .toDate(),
@@ -82,7 +82,7 @@ exports.author_create_post = [
     if (!errors.isEmpty()) {
       // There are errors. Render form again with sanitized values/errors messages.
       res.render("author_form", {
-        title: "Create Author",
+        title: "著者作成", // Translated
         author: author,
         errors: errors.array(),
       });
@@ -112,7 +112,7 @@ exports.author_delete_get = asyncHandler(async (req, res, next) => {
   }
 
   res.render("author_delete", {
-    title: "Delete Author",
+    title: "著者削除", // Translated
     author: author,
     author_books: allBooksByAuthor,
   });
@@ -129,7 +129,7 @@ exports.author_delete_post = asyncHandler(async (req, res, next) => {
   if (allBooksByAuthor.length > 0) {
     // Author has books. Render in same way as for GET route.
     res.render("author_delete", {
-      title: "Delete Author",
+      title: "著者削除", // Translated
       author: author,
       author_books: allBooksByAuthor,
     });
@@ -146,12 +146,12 @@ exports.author_update_get = asyncHandler(async (req, res, next) => {
   const author = await Author.findById(req.params.id).exec();
   if (author === null) {
     // No results.
-    const err = new Error("Author not found");
+    const err = new Error("著者が見つかりません"); // Translated
     err.status = 404;
     return next(err);
   }
 
-  res.render("author_form", { title: "Update Author", author: author });
+  res.render("author_form", { title: "著者更新", author: author }); // Translated
 });
 
 // Handle Author update on POST.
@@ -161,21 +161,21 @@ exports.author_update_post = [
     .trim()
     .isLength({ min: 1 })
     .escape()
-    .withMessage("First name must be specified.")
-    .isAlphanumeric()
-    .withMessage("First name has non-alphanumeric characters."),
+    .withMessage("名を入力してください。") // Translated
+    .isAlphanumeric() // Note: isAlphanumeric might be restrictive for some Japanese names.
+    .withMessage("名に英数字以外の文字が含まれています。"), // Translated
   body("family_name")
     .trim()
     .isLength({ min: 1 })
     .escape()
-    .withMessage("Family name must be specified.")
-    .isAlphanumeric()
-    .withMessage("Family name has non-alphanumeric characters."),
-  body("date_of_birth", "Invalid date of birth")
+    .withMessage("姓を入力してください。") // Translated
+    .isAlphanumeric() // Note: isAlphanumeric might be restrictive for some Japanese names.
+    .withMessage("姓に英数字以外の文字が含まれています。"), // Translated
+  body("date_of_birth", "生年月日が無効です") // Translated
     .optional({ values: "falsy" })
     .isISO8601()
     .toDate(),
-  body("date_of_death", "Invalid date of death")
+  body("date_of_death", "没年月日が無効です") // Translated
     .optional({ values: "falsy" })
     .isISO8601()
     .toDate(),
@@ -197,7 +197,7 @@ exports.author_update_post = [
     if (!errors.isEmpty()) {
       // There are errors. Render the form again with sanitized values and error messages.
       res.render("author_form", {
-        title: "Update Author",
+        title: "著者更新", // Translated
         author: author,
         errors: errors.array(),
       });
