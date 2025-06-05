@@ -1,5 +1,5 @@
 doctype html
-html(lang='en')
+html(lang='ja')
   head
     title= title
     meta(charset='utf-8')
@@ -8,6 +8,15 @@ html(lang='en')
     script(src="https://code.jquery.com/jquery-3.5.1.slim.min.js", integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj", crossorigin="anonymous")
     script(src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.min.js", integrity="sha384-+sLIOodYLS7CIrQpBjl+C7nPvqq+FbNUBDunl/OZv93DB7Ln/533i8e/mZXLi/P+", crossorigin="anonymous")
     link(rel='stylesheet', href='/stylesheets/style.css')
+
+
+  // Google Fonts: Montserrat & Lato & Noto Sans JP
+    link(rel="preconnect", href="https://fonts.googleapis.com")
+    link(rel="preconnect", href="https://fonts.gstatic.com", crossorigin)
+    link(href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Montserrat:wght@600;700&family=Noto+Sans+JP:wght@400;700&display=swap", rel="stylesheet")
+
+
+
   body
     div(class='container-fluid')
       div(class='row')
@@ -15,25 +24,25 @@ html(lang='en')
           block sidebar
             ul(class='sidebar-nav')
               li
-                a(href='/catalog') Home
+                a(href='/catalog') ホーム
               li
-                a(href='/catalog/books') All books
+                a(href='/catalog/books') 全ての書籍
               li
-                a(href='/catalog/authors') All authors
+                a(href='/catalog/authors') 全ての著者
               li
-                a(href='/catalog/genres') All genres
+                a(href='/catalog/genres') 全てのジャンル
               li
-                a(href='/catalog/bookinstances') All book-instances
+                a(href='/catalog/bookinstances') 全ての在庫
               li
                 hr
               li
-                a(href='/catalog/author/create') Create new author
+                a(href='/catalog/author/create') 新規著者作成
               li
-                a(href='/catalog/genre/create') Create new genre
+                a(href='/catalog/genre/create') 新規ジャンル作成
               li
-                a(href='/catalog/book/create') Create new book
+                a(href='/catalog/book/create') 新規書籍作成
               li
-                a(href='/catalog/bookinstance/create') Create new book instance (copy)
+                a(href='/catalog/bookinstance/create') 新規在庫作成 (コピー)
 
         div(class='col-sm-10')
           block content

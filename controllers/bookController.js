@@ -17,13 +17,13 @@ exports.index = asyncHandler(async (req, res, next) => {
   ] = await Promise.all([
     Book.countDocuments({}).exec(),
     BookInstance.countDocuments({}).exec(),
-    BookInstance.countDocuments({ status: "Available" }).exec(),
+    BookInstance.countDocuments({ status: "Available" }).exec(), // "Available" is a status from DB, not for translation here
     Author.countDocuments({}).exec(),
     Genre.countDocuments({}).exec(),
   ]);
 
   res.render("index", {
-    title: "Local Library Home",
+    title: "ローカルライブラリ・ホーム", // Translated
     book_count: numBooks,
     book_instance_count: numBookInstances,
     book_instance_available_count: numAvailableBookInstances,
@@ -39,7 +39,7 @@ exports.book_list = asyncHandler(async (req, res, next) => {
     .populate("author")
     .exec();
 
-  res.render("book_list", { title: "Book List", book_list: allBooks });
+  res.render("book_list", { title: "書籍一覧", book_list: allBooks }); // Translated
 });
 
 // Display detail page for a specific book.
@@ -52,13 +52,13 @@ exports.book_detail = asyncHandler(async (req, res, next) => {
 
   if (book === null) {
     // No results.
-    const err = new Error("Book not found");
+    const err = new Error("書籍が見つかりません"); // Translated
     err.status = 404;
     return next(err);
   }
 
   res.render("book_detail", {
-    title: book.title,
+    title: book.title, // This will display the book's actual title (data localization needed for this)
     book: book,
     book_instances: bookInstances,
   });
@@ -73,7 +73,7 @@ exports.book_create_get = asyncHandler(async (req, res, next) => {
   ]);
 
   res.render("book_form", {
-    title: "Create Book",
+    title: "書籍作成", // Translated
     authors: allAuthors,
     genres: allGenres,
   });
@@ -91,19 +91,19 @@ exports.book_create_post = [
   },
 
   // Validate and sanitize fields.
-  body("title", "Title must not be empty.")
+  body("title", "書名／タイトルを入力してください。") // Translated (More explicit than just "Title must not be empty")
     .trim()
     .isLength({ min: 1 })
     .escape(),
-  body("author", "Author must not be empty.")
+  body("author", "著者を選択してください。") // Translated (More specific for a selection field)
     .trim()
     .isLength({ min: 1 })
     .escape(),
-  body("summary", "Summary must not be empty.")
+  body("summary", "概要を入力してください。") // Translated
     .trim()
     .isLength({ min: 1 })
     .escape(),
-  body("isbn", "ISBN must not be empty").trim().isLength({ min: 1 }).escape(),
+  body("isbn", "ISBNを入力してください。").trim().isLength({ min: 1 }).escape(), // Translated
   body("genre.*").escape(),
   // Process request after validation and sanitization.
 
@@ -131,12 +131,12 @@ exports.book_create_post = [
 
       // Mark our selected genres as checked.
       for (const genre of allGenres) {
-        if (book.genre.indexOf(genre._id) > -1) {
+        if (book.genre.indexOf(genre._id) > -1) { // Or book.genre.includes(genre._id) for modern JS
           genre.checked = "true";
         }
       }
       res.render("book_form", {
-        title: "Create Book",
+        title: "書籍作成", // Translated
         authors: allAuthors,
         genres: allGenres,
         book: book,
@@ -163,7 +163,7 @@ exports.book_delete_get = asyncHandler(async (req, res, next) => {
   }
 
   res.render("book_delete", {
-    title: "Delete Book",
+    title: "書籍削除", // Translated
     book: book,
     book_instances: bookInstances,
   });
@@ -186,14 +186,14 @@ exports.book_delete_post = asyncHandler(async (req, res, next) => {
   if (bookInstances.length > 0) {
     // Book has book_instances. Render in same way as for GET route.
     res.render("book_delete", {
-      title: "Delete Book",
+      title: "書籍削除", // Translated
       book: book,
       book_instances: bookInstances,
     });
     return;
   } else {
     // Book has no BookInstance objects. Delete object and redirect to the list of books.
-    await Book.findByIdAndDelete(req.body.id);
+    await Book.findByIdAndDelete(req.body.id); // Ensure req.body.id is correct, usually req.body.bookid or req.params.id
     res.redirect("/catalog/books");
   }
 });
@@ -202,25 +202,30 @@ exports.book_delete_post = asyncHandler(async (req, res, next) => {
 exports.book_update_get = asyncHandler(async (req, res, next) => {
   // Get book, authors and genres for form.
   const [book, allAuthors, allGenres] = await Promise.all([
-    Book.findById(req.params.id).populate("author").exec(),
+    Book.findById(req.params.id).populate("author").exec(), // Removed .populate("genre") as it's handled below
     Author.find().sort({ family_name: 1 }).exec(),
     Genre.find().sort({ name: 1 }).exec(),
   ]);
 
   if (book === null) {
     // No results.
-    const err = new Error("Book not found");
+    const err = new Error("書籍が見つかりません"); // Translated
     err.status = 404;
     return next(err);
   }
 
   // Mark our selected genres as checked.
   allGenres.forEach((genre) => {
-    if (book.genre.includes(genre._id)) genre.checked = "true";
+    // Ensure book.genre is an array of IDs (strings or ObjectIds) for comparison
+    // The tutorial usually stores genre IDs in the book model.
+    // Using .toString() for robust comparison if genre._id is an ObjectId.
+    if (book.genre.some(g => g.toString() === genre._id.toString())) {
+        genre.checked = "true";
+    }
   });
 
   res.render("book_form", {
-    title: "Update Book",
+    title: "書籍更新", // Translated
     authors: allAuthors,
     genres: allGenres,
     book: book,
@@ -239,19 +244,19 @@ exports.book_update_post = [
   },
 
   // Validate and sanitize fields.
-  body("title", "Title must not be empty.")
+  body("title", "書名／タイトルを入力してください。") // Translated
     .trim()
     .isLength({ min: 1 })
     .escape(),
-  body("author", "Author must not be empty.")
+  body("author", "著者を選択してください。") // Translated
     .trim()
     .isLength({ min: 1 })
     .escape(),
-  body("summary", "Summary must not be empty.")
+  body("summary", "概要を入力してください。") // Translated
     .trim()
     .isLength({ min: 1 })
     .escape(),
-  body("isbn", "ISBN must not be empty").trim().isLength({ min: 1 }).escape(),
+  body("isbn", "ISBNを入力してください。").trim().isLength({ min: 1 }).escape(), // Translated
   body("genre.*").escape(),
 
   // Process request after validation and sanitization.
@@ -280,12 +285,13 @@ exports.book_update_post = [
 
       // Mark our selected genres as checked.
       for (const genre of allGenres) {
-        if (book.genre.includes(genre._id)) {
+        // Ensure book.genre (from req.body) is an array of strings for includes check
+        if (book.genre.includes(genre._id.toString())) {
           genre.checked = "true";
         }
       }
       res.render("book_form", {
-        title: "Update Book",
+        title: "書籍更新", // Translated
         authors: allAuthors,
         genres: allGenres,
         book: book,

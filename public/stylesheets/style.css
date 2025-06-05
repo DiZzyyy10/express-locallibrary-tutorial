@@ -1,5 +1,203 @@
+/* --- Base Styles --- */
+body {
+  background-color: #F8F9FA; /* Soft light gray background */
+  color: #343A40; /* Dark gray text for readability */
+  font-family: 'Lato', 'Noto Sans JP', sans-serif; /* Default body font */
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Montserrat', 'Noto Sans JP', sans-serif; /* Heading font */
+  font-weight: 600;
+  color: #212529; /* Slightly darker for headings */
+  margin-top: 1.5em;
+  margin-bottom: 0.75em;
+}
+
+h1 { font-size: 2.25rem; }
+h2 { font-size: 1.75rem; }
+h3 { font-size: 1.5rem; }
+
+a {
+  color: #008080; /* Deep Teal for links */
+  transition: color 0.2s ease-in-out;
+}
+
+a:hover {
+  color: #005A5A; /* Darker Teal on hover */
+  text-decoration: none;
+}
+
+hr {
+  border-top: 1px solid #E9ECEF; /* Lighter hr lines */
+}
+
+/* --- Layout & Sidebar --- */
+.container-fluid {
+  /* Bootstrap default is fine, or add slight overall padding if needed */
+}
+
 .sidebar-nav {
-  margin-top: 20px;
-  padding: 0;
+  background-color: #FFFFFF; /* White sidebar background */
+  padding: 20px 15px;
+  border-right: 1px solid #DEE2E6; /* Subtle border */
+  height: 100vh; /* Make sidebar full height if it isn't already sticky/fixed */
+  position: sticky; /* Optional: makes sidebar stay in place on scroll */
+  top: 0;
+}
+
+.sidebar-nav ul {
   list-style: none;
+  padding-left: 0;
+}
+
+.sidebar-nav li a {
+  display: block;
+  padding: 8px 15px;
+  border-radius: 4px;
+  color: #495057; /* Slightly muted link color */
+  font-weight: 400; /* Lato regular */
+}
+
+.sidebar-nav li a:hover {
+  background-color: #E9ECEF; /* Light gray hover for links */
+  color: #008080; /* Accent color on hover */
+}
+
+.sidebar-nav li a.active { /* You might need JS to set an 'active' class */
+  background-color: #008080; /* Accent color for active link */
+  color: #FFFFFF;
+  font-weight: 700; /* Lato bold */
+}
+
+/* Assuming your main content area is the col-sm-10 next to the sidebar */
+.col-sm-10 { /* Or add a specific class like .main-content in your layout.pug */
+  background-color: #FFFFFF; /* White background for content often preferred */
+  padding: 25px 30px;     /* Generous padding */
+  /* If sidebar is not sticky, you might not need a separate bg for content unless it's boxed */
+}
+
+
+/* --- Buttons --- */
+.btn {
+  border-radius: 4px; /* Slightly softer edges */
+  font-weight: 700; /* Lato bold or Montserrat */
+  font-family: 'Montserrat', 'Noto Sans JP', sans-serif;
+  padding: 0.5rem 1rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-primary {
+  background-color: #008080; /* Deep Teal */
+  border-color: #008080;
+  color: #FFFFFF;
+}
+
+.btn-primary:hover {
+  background-color: #006666; /* Darker Teal */
+  border-color: #006666;
+  color: #FFFFFF;
+}
+
+.btn-secondary { /* Example for other buttons if needed */
+  background-color: #6C757D;
+  border-color: #6C757D;
+  color: #FFFFFF;
+}
+.btn-secondary:hover {
+  background-color: #5A6268;
+  border-color: #5A6268;
+}
+
+
+/* --- Forms --- */
+.form-group {
+  margin-bottom: 1.5rem; /* More space between form groups */
+}
+
+.form-control {
+  border-radius: 4px;
+  border: 1px solid #CED4DA;
+  padding: 0.5rem 0.75rem;
+}
+
+.form-control:focus {
+  border-color: #008080;
+  box-shadow: 0 0 0 0.2rem rgba(0, 128, 128, 0.25); /* Teal focus glow */
+}
+
+label {
+  font-weight: 700; /* Lato Bold or Montserrat for labels */
+  font-family: 'Montserrat', 'Noto Sans JP', sans-serif;
+  margin-bottom: 0.5rem;
+  color: #495057;
+}
+
+/* --- Tables --- */
+.table {
+  background-color: #FFFFFF; /* Ensure tables are on a white background if content area is white */
+  border: 1px solid #DEE2E6; /* Optional: a light border around the table */
+}
+
+.table thead th {
+  font-family: 'Montserrat', 'Noto Sans JP', sans-serif;
+  font-weight: 700;
+  color: #343A40;
+  background-color: #F8F9FA; /* Light gray for table header */
+  border-bottom: 2px solid #008080; /* Accent border for header bottom */
+  border-top: none; /* Clean top */
+}
+
+.table td, .table th {
+  padding: 0.75rem;
+  vertical-align: top;
+  border-top: 1px solid #DEE2E6; /* Horizontal lines for rows */
+}
+.table tbody tr:hover {
+  background-color: #F1F3F5; /* Subtle hover for table rows */
+}
+
+/* --- Specific Page Elements (You'll need to adjust selectors based on your Pug) --- */
+
+/* Index page counts - example styling */
+.index-counts ul { /* Assuming your counts are in a UL */
+  list-style: none;
+  padding-left: 0;
+}
+.index-counts li {
+  background-color: #FFFFFF;
+  padding: 15px;
+  margin-bottom: 10px;
+  border: 1px solid #DEE2E6;
+  border-left: 5px solid #008080; /* Accent left border */
+  border-radius: 4px;
+}
+
+/* Detail page definition lists (dl, dt, dd) */
+dl dt {
+  font-family: 'Montserrat', 'Noto Sans JP', sans-serif;
+  font-weight: 700;
+  color: #343A40;
+  margin-top: 1rem;
+}
+dl dd {
+  margin-left: 0;
+  margin-bottom: 1rem;
+  padding-left: 1.5em; /* Indent definition description */
+  border-left: 3px solid #E9ECEF;
+}
+
+/* Error messages from validation */
+.errors-list ul { /* Assuming errors are rendered in a ul by your Pug */
+  list-style-type: none;
+  padding: 10px;
+  margin-top: 15px;
+  background-color: #F8D7DA; /* Light red for errors */
+  border: 1px solid #F5C6CB;
+  color: #721C24;
+  border-radius: 4px;
+}
+.errors-list li {
+  margin-bottom: 5px;
 }
