@@ -9,13 +9,22 @@ block content
         li
           a(href=val.url) #{val.book.title} : #{val.imprint} -&nbsp;
           if val.status=='Available'
-            span.text-success #{val.status}
+            span.text-success 利用可能
           else if val.status=='Maintenance'
-            span.text-danger #{val.status}
+            span.text-danger メンテナンス中
+          else if val.status=='Loaned'
+            span.text-warning 貸出中
+          else if val.status=='Reserved'
+            span.text-warning 予約済
           else
-            span.text-warning #{val.status}
+            // Fallback for any other statuses, though the enum usually covers these
+            span.text-warning #{val.status} 
+          
           if val.status!='Available'
-            span  (Due: #{val.due_back_formatted})
+            //- Display due date only if not available (i.e., for Loaned, Reserved, Maintenance)
+            //- The tutorial's default model for BookInstance only has due_back for 'Loaned' items,
+            //- but the condition val.status!='Available' is what the original template uses.
+            span  (返却期限: #{val.due_back_formatted})
 
   else
-    p There are no book copies in this library.
+    p このライブラリには本の在庫がありません。
